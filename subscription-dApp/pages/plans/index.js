@@ -37,9 +37,9 @@ const providerOptions = {
   },
 }
 
-const FETCH_PAGE = "https://fautor.vercel.app/api/plans"
+const FETCH_PAGE = "/api/plans"
 
-const fetcher = (url) => fetch.get(url).then((res) => res.data)
+const fetcher = (url) => axios.get(url).then((res) => res.data)
 
 export default function PlanHome({ plansData, fallback, account }) {
   const [buttonText, setButtonText] = useState("Create Plan")
@@ -272,7 +272,7 @@ export const getServerSideProps = async () => {
   return {
     props: {
       fallback: {
-        "https://fautor.vercel.app/api/plans": plansData,
+        "/api/plans": plansData,
       },
     },
   }
