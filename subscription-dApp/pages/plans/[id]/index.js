@@ -726,8 +726,7 @@ export default function PlanPage({
                     }
                     return (
                       <TierCard
-                        id={plan.planList._id}
-                        keyId={plan.planList._id}
+                        key={plan.planList._id}
                         index={index}
                         name={plan.planList.title}
                         description={plan.planList.description}

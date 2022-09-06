@@ -88,9 +88,9 @@ export default function SubscriberPage({ subscriptions, account }) {
   return (
     <>
       <div>
-        <section class="text-gray-600 body-font">
-          <div class="container px-5 mt-9 mb-8  ml-0 ">
-            <div class="flex flex-wrap justify-evenly -m-4 ">
+        <section className="text-gray-600 body-font">
+          <div className="container px-5 mt-9 mb-8  ml-0 ">
+            <div className="flex flex-wrap justify-evenly -m-4 ">
               {subscriptions.subscriptions.map((subPlan) => {
                 if (subPlan.subscribedPlan === null) {
                   return (

@@ -4,7 +4,7 @@ import React from "react"
 
 export default function TierCard(props) {
   return (
-    <div key={props.keyId} id={props.id} className="">
+    <div key={props.key} className="">
       <div className="container  flex hover:scale-105 transition duration-300 ">
         <div className="max-w-sm my-3">
           <div className="bg-gradient-to-r from-[#f9d07d]/60 to-[#FFFAA7]/80 relative  shadow-lg hover:shadow-xl transition duration-500 rounded-lg">
