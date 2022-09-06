@@ -128,7 +128,7 @@ export default function SubscriberPage({ subscriptions, account }) {
 }
 
 export const getServerSideProps = async ({ query: { id } }) => {
-  const res = await axios.get(`https://fautor.vercel.app/api/subscriber/${id}`)
+  const res = await fetch.get(`https://fautor.vercel.app/api/subscriber/${id}`)
   return {
     props: {
       subscriptions: res.data,

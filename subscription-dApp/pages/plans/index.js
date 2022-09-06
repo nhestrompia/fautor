@@ -272,7 +272,7 @@ export const getServerSideProps = async () => {
   return {
     props: {
       fallback: {
-        "/api/plans": plansData,
+        "https://fautor.vercel.app/api/plans": plansData,
       },
     },
   }
