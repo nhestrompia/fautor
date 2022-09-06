@@ -817,7 +817,7 @@ export default function PlanPage({
 }
 
 export const getServerSideProps = async ({ query: { id } }) => {
-  const res = await axios.get(`https://fautor.vercel.app/api/plans/${id}`)
+  const res = await fetch(`https://fautor.vercel.app/api/plans/${id}`)
   return {
     props: {
       plans: res.data,
