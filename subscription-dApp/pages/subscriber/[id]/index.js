@@ -94,7 +94,10 @@ export default function SubscriberPage({ subscriptions, account }) {
               {subscriptions.subscriptions.map((subPlan) => {
                 if (subPlan.subscribedPlan === null) {
                   return (
-                    <div className="flex justify-center  items-center mt-20 text-3xl pt-80">
+                    <div
+                      key={subPlan._id}
+                      className="flex justify-center  items-center mt-20 text-3xl pt-80"
+                    >
                       No Subscription
                     </div>
                   )
