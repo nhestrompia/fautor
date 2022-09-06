@@ -75,10 +75,13 @@ export default function SubscriberPage({ subscriptions, account }) {
 
   const deletePlanData = async (address, plan) => {
     try {
-      const res = await axios.delete(`/api/subscriber/${subscriptions._id}`, {
-        data: { subbedAddress: address, planId: plan },
-        headers: { "Content-Type": "application/json" },
-      })
+      const res = await axios.delete(
+        `https://fautor.vercel.app/api/subscriber/${subscriptions._id}`,
+        {
+          data: { subbedAddress: address, planId: plan },
+          headers: { "Content-Type": "application/json" },
+        }
+      )
       router.push(`/subscriber/${subscriptions._id}`)
     } catch (err) {
       console.error(err)
@@ -125,7 +128,7 @@ export default function SubscriberPage({ subscriptions, account }) {
 }
 
 export const getServerSideProps = async ({ query: { id } }) => {
-  const res = await axios.get(`/api/subscriber/${id}`)
+  const res = await axios.get(`https://fautor.vercel.app/api/subscriber/${id}`)
   return {
     props: {
       subscriptions: res.data,

@@ -142,7 +142,7 @@ export default function PlanPage({
       }
 
       const res = await axios.post(
-        `/api/plans/${plans._id}`,
+        `https://fautor.vercel.app/api/plans/${plans._id}`,
         {
           ...newPlan,
           selectedPlanId: id,
@@ -165,7 +165,7 @@ export default function PlanPage({
       }
 
       const res = await axios.post(
-        `/api/plans/${plans._id}`,
+        `https://fautor.vercel.app/api/plans/${plans._id}`,
         {
           address: add,
           index: ind,
@@ -186,10 +186,13 @@ export default function PlanPage({
 
   const deletePlanData = async (planIndex) => {
     try {
-      const res = await axios.delete(`/api/plans/${plans._id}`, {
-        data: { plan: planIndex },
-        headers: { "Content-Type": "application/json" },
-      })
+      const res = await axios.delete(
+        `https://fautor.vercel.app/api/plans/${plans._id}`,
+        {
+          data: { plan: planIndex },
+          headers: { "Content-Type": "application/json" },
+        }
+      )
       router.push(`/plans/${plans._id}`)
     } catch (err) {
       console.error(err)
@@ -716,7 +719,7 @@ export default function PlanPage({
                 <div
                   className={` px-8 mx-8 ${
                     plans.tiers.length == 0
-                      ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 mt-20 md:mt-28 lg:mt-16 gap-10 lg:mt-36 "
+                      ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 mt-20 md:mt-28 lg:mt-16 gap-10  "
                       : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5  gap-6 pt-10"
                   } `}
                 >
@@ -814,7 +817,7 @@ export default function PlanPage({
 }
 
 export const getServerSideProps = async ({ query: { id } }) => {
-  const res = await axios.get(`/api/plans/${id}`)
+  const res = await axios.get(`https://fautor.vercel.app/api/plans/${id}`)
   return {
     props: {
       plans: res.data,
