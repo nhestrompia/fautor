@@ -153,7 +153,7 @@ export default function Donation(props, account) {
                             buttonId === "ERC"
                               ? "text-[#5f6781] scale-125"
                               : "text-gray-400"
-                          } focus:ring-2 px-4 `}
+                          } focus:ring-2 pr-2.5 `}
                           onClick={() => setButtonId("ERC")}
                         />
                         <FontAwesomeIcon
@@ -162,7 +162,7 @@ export default function Donation(props, account) {
                             buttonId === "ETH"
                               ? "text-[#5f6781] scale-125"
                               : "text-gray-400"
-                          } focus:ring-2 `}
+                          } focus:ring-2 ml-0.5`}
                           onClick={() => setButtonId("ETH")}
                         />
                       </div>
