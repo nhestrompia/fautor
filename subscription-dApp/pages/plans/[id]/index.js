@@ -459,6 +459,8 @@ export default function PlanPage({
         image: files[0],
       })
 
+      console.log(metadata)
+
       setNftUrlIpfs(metadata.url)
 
       const urlArray = metadata.data.image.href.split("/")
@@ -638,11 +640,6 @@ export default function PlanPage({
                       onChange={onChange}
                     />
                   ))}
-                  {files[0] && (
-                    <div className=" w-80 h-30">
-                      {console.log("f,le0", files[0].path)}
-                    </div>
-                  )}
 
                   <div {...getRootProps()}>
                     <input {...getInputProps()} />

@@ -9,19 +9,15 @@ export default function TierCard(props) {
         <div className="max-w-sm my-3">
           <div className="bg-gradient-to-r from-[#f9d07d]/60 to-[#FFFAA7]/80 relative  shadow-lg hover:shadow-xl transition duration-500 rounded-lg">
             <div className=" block  bg-transparent  w-64 relative h-48 rounded-t-lg overflow-hidden">
-              <a
-                href={`https://testnets.opensea.io/assets/goerli/${props.nft}/${props.planId}`}
-              >
-                <Image
-                  src={props.image}
-                  loading="lazy"
-                  layout="fill"
-                  objectFit="contain"
-                  width={256}
-                  height={192}
-                  className="object-cover  object-center w-full h-full block"
-                />
-              </a>
+              <Image
+                src={props.image}
+                loading="lazy"
+                layout="fill"
+                objectFit="contain"
+                width={256}
+                height={192}
+                className="object-cover  object-center w-full h-full block"
+              />
             </div>
             <div className="py-6 px-8 rounded-lg bg-white ">
               <h1 className="text-gray-700 font-bold text-2xl mb-3 text-center hover:text-gray-900 ">
