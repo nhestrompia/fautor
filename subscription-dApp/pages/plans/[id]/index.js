@@ -453,7 +453,7 @@ export default function PlanPage({
       token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN,
     })
 
-    console.log("api key", NEXT_PUBLIC_NFT_STORAGE_TOKEN)
+    console.log("api key", process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN)
     try {
       const metadata = await client.store({
         name: values.title,
