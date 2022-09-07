@@ -19,7 +19,7 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnect, // required
     options: {
-      infuraId: process.env.INFURA_ID, // required
+      infuraId: process.env.NEXT_PUBLIC_INFURA_ID, // required
     },
   },
 }

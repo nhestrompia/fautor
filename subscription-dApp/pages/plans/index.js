@@ -32,7 +32,7 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnect, // required
     options: {
-      infuraId: process.env.INFURA_ID, // required
+      infuraId: process.env.NEXT_PUBLIC_INFURA_ID, // required
     },
   },
 }
@@ -266,7 +266,7 @@ export default function PlanHome({ plansData, fallback, account }) {
   )
 }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const plansData = await fetcher(FETCH_PAGE)
 
   return {
