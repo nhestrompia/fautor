@@ -55,8 +55,6 @@ export default function Wallet({
   provider,
   library,
 }) {
-  const [isOwner, setIsOwner] = useState(false)
-
   const router = useRouter()
 
   let web3Modal
@@ -77,6 +75,7 @@ export default function Wallet({
           },
         ],
       })
+      router.reload("/")
     } catch (err) {
       console.error(err.message)
     }
@@ -84,27 +83,6 @@ export default function Wallet({
 
   const handleNetworkSwitch = async () => {
     await changeNetwork()
-    router.reload("/")
-  }
-
-  const getOwner = async (currentAccount) => {
-    try {
-      const subscriptionContract = new Contract(
-        subscriptionAddress,
-        SUBSCRIPTION_CONTRACT_ABI,
-        library
-      )
-
-      const owner = await subscriptionContract.owner()
-
-      if (currentAccount.toLowerCase() === owner.toLowerCase()) {
-        setIsOwner(true)
-      } else {
-        setIsOwner(false)
-      }
-    } catch (err) {
-      console.error(err.message)
-    }
   }
 
   const refreshState = () => {
@@ -120,12 +98,9 @@ export default function Wallet({
   useEffect(() => {
     if (provider?.on) {
       const handleAccountsChanged = (accounts) => {
-        setIsOwner(false)
-
         if (accounts) {
           setAccount(accounts[0])
 
-          getOwner(accounts[0])
           connectWallet()
         }
       }
@@ -165,6 +140,7 @@ export default function Wallet({
       const accounts = await library.listAccounts()
 
       const { chainId } = await library.getNetwork()
+
       setProvider(provider)
       setLibrary(library)
 
@@ -177,11 +153,11 @@ export default function Wallet({
       )
 
       if (accounts) {
+        setAccount(accounts[0])
+
         if (chainId !== 5) {
           await changeNetwork()
         }
-        setAccount(accounts[0])
-        await getOwner(accounts[0])
 
         const readBalance = await library.getBalance(accounts[0])
         const accountBalance = ethers.utils.formatEther(readBalance)
