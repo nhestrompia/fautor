@@ -52,6 +52,15 @@ async function sendTx() {
           for (let k = 0; k < selectedTier.subscriberList.length; k++) {
             const subscriber =
               selectedTier.subscriberList[k].subscribers.address
+            const subscriberId = selectedTier.subscriberList[k].subscribers._id
+
+            const subscriberCheck = await subscriptionContract.subscribers(
+              subscriber
+            )
+            const payedMonth = parseInt(
+              subscriberCheck.payedMonthCounter._hex,
+              16
+            )
 
             const tx = await subscriptionContract.currentPlan(
               subscriber,
@@ -66,6 +75,27 @@ async function sendTx() {
               if (tx2 === false) {
                 subList.push(subscriber)
               }
+            }
+            if (payedMonth == 12) {
+              const updatedPlan = await EachPlan.findByIdAndUpdate(tierId, {
+                $pull: {
+                  subscriberList: {
+                    subscribers: subscriberId,
+                  },
+                },
+              })
+
+              const subscriberUpdate = await Subscriber.findById(subscriberId)
+                .select("subscriptions")
+                .where("subscribedPlan")
+                .equals(tierId)
+                .updateOne({
+                  $pull: {
+                    subscriptions: {
+                      subscribedPlan: tierId,
+                    },
+                  },
+                })
             }
           }
         } else {
