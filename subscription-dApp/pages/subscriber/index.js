@@ -13,16 +13,7 @@ import { Contract, ethers } from "ethers"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-const providerOptions = {
-  walletconnect: {
-    package: WalletConnect, // required
-    options: {
-      infuraId: process.env.NEXT_PUBLIC_INFURA_ID, // required
-    },
-  },
-}
-
-export default function UserPage({ subscriptions, account }) {
+export default function UserPage({ subscriptions, account, library }) {
   const router = useRouter()
 
   const [managePage, setManagePage] = useState("")
@@ -30,13 +21,6 @@ export default function UserPage({ subscriptions, account }) {
 
   const mintToken = async () => {
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-      const provider = await web3Modal.connect()
-
-      const library = new ethers.providers.Web3Provider(provider)
       const signer = library.getSigner()
 
       const tokenContract = new Contract(
@@ -71,14 +55,6 @@ export default function UserPage({ subscriptions, account }) {
     })
   }, [account])
 
-  // let web3Modal
-  // if (typeof window !== "undefined") {
-  //   const web3Modal = new Web3Modal({
-  //     providerOptions, // required
-  //     cacheProvider: true, // optional
-  //   })
-  // }
-
   return (
     <div className="pt-20 mt-20">
       {account ? (
@@ -100,7 +76,7 @@ export default function UserPage({ subscriptions, account }) {
               <p className="flex-1 text-center text-gray-600 mb-4 text-base leading-relaxed ">
                 Start browsing plans to support or create a new subscription
                 plan for your fans. Earn NFT Tier badges with your support and
-                give your loyal supporters a unique piece of art you made
+                give your loyal supporters a unique piece of art you made.
               </p>
               <Link href={"/plans"}>
                 <button className=" text-white tracking-widest bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none   font-medium rounded-lg text-md px-5 py-3 text-center -mr-2 mt-8">
@@ -114,7 +90,7 @@ export default function UserPage({ subscriptions, account }) {
               </h2>
               <p className="flex-1  text-gray-600 mb-4 text-base leading-relaxed text-center ">
                 Mint example ERC20 token for payments now and start using it to
-                support other creators/artists
+                support other creators/artists.
               </p>
               <button
                 className=" text-white tracking-widest bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl  focus:outline-none   font-medium rounded-lg text-md px-5 py-3 text-center -mr-2 mt-8"

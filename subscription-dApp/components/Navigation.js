@@ -22,11 +22,15 @@ function Navigation(props) {
             accTokenBalance={props.accTokenBalance}
             setAccBalance={props.setAccBalance}
             setAccTokenBalance={props.setAccTokenBalance}
+            provider={props.provider}
+            library={props.library}
+            setProvider={props.setProvider}
+            setLibrary={props.setLibrary}
           />
 
           <button
             type="button"
-            className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
+            className="inline-flex items-center p-2 text-sm  rounded-lg md:hidden  focus:outline-none focus:ring-2  text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
             onClick={() => setIsNavOpen((prevState) => !prevState)}
           >
             <svg
@@ -52,10 +56,10 @@ function Navigation(props) {
           }
           id="navbar-sticky"
         >
-          <ul className="flex flex-col ml-20 mr-8 p-4 mt-4  rounded-lg border  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white bg-gray-800 md:bg-gray-900 border-gray-700">
+          <ul className="flex flex-col ml-20 mr-8 p-4 mt-4  rounded-lg border  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0  bg-gray-800 md:bg-gray-900 border-gray-700">
             <li>
               <Link href={"/"}>
-                <a className="block py-2 pr-4 pl-3 text-gray-700 rounded  md:hover:bg-transparent  md:p-0 md:hover:text-white text-gray-400 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700">
+                <a className="block py-2 pr-4 pl-3  rounded   md:p-0 md:hover:text-white text-gray-400 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700">
                   Home
                 </a>
               </Link>
@@ -63,7 +67,7 @@ function Navigation(props) {
 
             <li>
               <Link href={"/plans"}>
-                <a className="block py-2 pr-4 pl-3 text-gray-700 rounded  md:hover:bg-transparent  md:p-0 md:hover:text-white text-gray-400 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700">
+                <a className="block py-2 pr-4 pl-3  rounded   md:p-0 md:hover:text-white text-gray-400 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700">
                   Plans
                 </a>
               </Link>
@@ -71,7 +75,7 @@ function Navigation(props) {
 
             <li>
               <Link href={"/subscriber"}>
-                <a className="block py-2 pr-4 pl-3 text-gray-700 rounded  md:hover:bg-transparent  md:p-0 md:hover:text-white text-gray-400 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700">
+                <a className="block py-2 pr-4 pl-3  rounded   md:p-0 md:hover:text-white text-gray-400 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700">
                   User
                 </a>
               </Link>

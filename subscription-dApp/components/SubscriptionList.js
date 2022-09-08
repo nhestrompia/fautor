@@ -69,7 +69,7 @@ export default function SubscriptionList({ plansData, account, setIsOpen }) {
           <div className="container px-5 mt-9 mb-8  ml-0">
             <div className="flex flex-wrap -m-4">
               {data.plans.map((plan) => {
-                return <Plan key={plan._id} plans={plan} />
+                return <Plan planKey={plan._id} plans={plan} />
               })}
 
               <div className="lg:w-1/4 md:w-1/2 mt-8 p-4 w-full  ">

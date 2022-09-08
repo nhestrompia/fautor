@@ -21,20 +21,12 @@ import {
 import TierCard from "../../../components/TierCard"
 import { useDropzone } from "react-dropzone"
 
-const providerOptions = {
-  walletconnect: {
-    package: WalletConnect, // required
-    options: {
-      infuraId: process.env.NEXT_PUBLIC_INFURA_ID, // required
-    },
-  },
-}
-
 export default function PlanPage({
   plans,
   account,
   accBalance,
   accTokenBalance,
+  library,
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const [approved, setApproved] = useState(false)
@@ -43,7 +35,6 @@ export default function PlanPage({
   const [nftAddress, setNftAddress] = useState("")
   const [isOwner, setIsOwner] = useState(false)
   const [subscribed, setSubscribed] = useState(false)
-  const [provider, setProvider] = useState()
 
   const [metaDataURL, setMetaDataURL] = useState()
   const [nftUrlIpfs, setNftUrlIpfs] = useState("")
@@ -102,14 +93,6 @@ export default function PlanPage({
       required: true,
     },
   ]
-
-  // let web3Modal
-  // if (typeof window !== "undefined") {
-  //   const web3Modal = new Web3Modal({
-  //     providerOptions, // required
-  //     cacheProvider: true, // optional
-  //   })
-  // }
 
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
@@ -201,12 +184,6 @@ export default function PlanPage({
 
   const deletePlan = async (planId, planIndex) => {
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-      const provider = await web3Modal.connect()
-      const library = new ethers.providers.Web3Provider(provider)
       const signer = library.getSigner()
       const subscriptionContract = new Contract(
         subscriptionAddress,
@@ -225,13 +202,6 @@ export default function PlanPage({
 
   const subscribe = async (planId, planIndex) => {
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-      const provider = await web3Modal.connect()
-
-      const library = new ethers.providers.Web3Provider(provider)
       const signer = library.getSigner()
 
       const subscriptionContract = new Contract(
@@ -326,13 +296,6 @@ export default function PlanPage({
 
   const checkBalance = async () => {
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-      const provider = await web3Modal.connect()
-      const library = new ethers.providers.Web3Provider(provider)
-
       const tokenContract = new Contract(
         TOKEN_CONTRACT_ADDRESS,
         TOKEN_CONTRACT_ABI,
@@ -350,14 +313,7 @@ export default function PlanPage({
 
   const withdrawDonation = async () => {
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-      const provider = await web3Modal.connect()
-      const library = new ethers.providers.Web3Provider(provider)
       const signer = library.getSigner()
-      const signerAddress = signer.getAddress()
 
       const tokenContract = new Contract(
         TOKEN_CONTRACT_ADDRESS,
@@ -400,13 +356,6 @@ export default function PlanPage({
 
   const checkSubscription = async () => {
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-      const provider = await web3Modal.connect()
-      const library = new ethers.providers.Web3Provider(provider)
-
       const subscriptionContract = new Contract(
         subscriptionAddress,
         SUBSCRIPTION_CONTRACT_ABI,
@@ -453,7 +402,6 @@ export default function PlanPage({
       token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN,
     })
 
-    console.log("api key", process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN)
     try {
       const metadata = await client.store({
         name: values.title,
@@ -504,12 +452,6 @@ export default function PlanPage({
     }
 
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-      const provider = await web3Modal.connect()
-      const library = new ethers.providers.Web3Provider(provider)
       const signer = library.getSigner()
 
       const subscriptionContract = new Contract(
@@ -557,53 +499,32 @@ export default function PlanPage({
     }
   }
 
-  const getIPFSGatewayURL = (ipfsURL) => {
-    const urlArray = ipfsURL.split("/")
-    const ipfsGateWayURL = `https://ipfs.io/ipfs/${urlArray[2]}/${urlArray[3]}`
-    console.log("ipfs url", ipfsGateWayURL)
-    console.log("meteadata url state", metaDataURL)
-    return ipfsGateWayURL
-  }
-
-  const getProvider = async () => {
-    const web3Modal = new Web3Modal({
-      cacheProvider: true, // optional
-      providerOptions, // required
-    })
-
-    const provider = await web3Modal.connect()
-    setProvider(provider)
-  }
+  // const getIPFSGatewayURL = (ipfsURL) => {
+  //   const urlArray = ipfsURL.split("/")
+  //   const ipfsGateWayURL = `https://ipfs.io/ipfs/${urlArray[2]}/${urlArray[3]}`
+  //   console.log("ipfs url", ipfsGateWayURL)
+  //   console.log("meteadata url state", metaDataURL)
+  //   return ipfsGateWayURL
+  // }
 
   const getAllowance = async (signer, planId) => {
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-
-      const provider = await web3Modal.connect()
-      const library = new ethers.providers.Web3Provider(provider)
-
-      const signerAcc = signer.getAddress()
-      const signerAddress = await signerAcc
-
       const tokenContract = new Contract(
         TOKEN_CONTRACT_ADDRESS,
         TOKEN_CONTRACT_ABI,
-        signer
+        library
       )
 
       setApproved(false)
 
       const allowanceCheck = await tokenContract.allowance(
-        signerAddress,
+        account,
         subscriptionAddress
       )
 
       const checkValue = planId.price * 12 * 1000000000000000000
 
-      if (allowanceCheck >= planId.price * 12) {
+      if (allowanceCheck >= checkValue) {
         setApproved(true)
       } else {
         setApproved(false)
@@ -771,6 +692,7 @@ export default function PlanPage({
                         accTokenBalance={accTokenBalance}
                         subscription={subscriptionAddress}
                         pageId={plans._id}
+                        library={library}
                       />
                     </div>
                   ) : (

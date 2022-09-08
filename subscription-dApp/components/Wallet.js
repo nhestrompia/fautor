@@ -49,15 +49,16 @@ export default function Wallet({
   setAccBalance,
   accTokenBalance,
   setAccTokenBalance,
+  setProvider,
+  setLibrary,
+  provider,
+  library,
 }) {
-  const [provider, setProvider] = useState()
-  const [library, setLibrary] = useState()
-
   const [isOwner, setIsOwner] = useState(false)
 
   let web3Modal
   if (typeof window !== "undefined") {
-    const web3Modal = new Web3Modal({
+    web3Modal = new Web3Modal({
       providerOptions, // required
       cacheProvider: true, // optional
     })
@@ -84,14 +85,6 @@ export default function Wallet({
 
   const getOwner = async (currentAccount) => {
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-
-      const provider = await web3Modal.connect()
-      const library = new ethers.providers.Web3Provider(provider)
-
       const subscriptionContract = new Contract(
         subscriptionAddress,
         SUBSCRIPTION_CONTRACT_ABI,
@@ -115,11 +108,6 @@ export default function Wallet({
   }
 
   useEffect(() => {
-    const web3Modal = new Web3Modal({
-      cacheProvider: true, // optional
-      providerOptions, // required
-    })
-
     if (web3Modal.cachedProvider) {
       connectWallet()
     }
@@ -161,21 +149,12 @@ export default function Wallet({
   }, [provider])
 
   const disconnect = async () => {
-    const web3Modal = new Web3Modal({
-      cacheProvider: true,
-      providerOptions,
-    })
     await web3Modal.clearCachedProvider()
     refreshState()
   }
 
   const connectWallet = async () => {
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true,
-        providerOptions,
-      })
-
       const provider = await web3Modal.connect()
 
       const library = new ethers.providers.Web3Provider(provider)
@@ -193,11 +172,10 @@ export default function Wallet({
         signer
       )
 
-      if (chainId !== 5) {
-        await changeNetwork()
-      }
-
       if (accounts) {
+        if (chainId !== 5) {
+          await changeNetwork()
+        }
         setAccount(accounts[0])
         await getOwner(accounts[0])
 

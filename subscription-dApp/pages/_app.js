@@ -8,6 +8,10 @@ function MyApp({ Component, pageProps }) {
   const [account, setAccount] = useState()
   const [accTokenBalance, setAccTokenBalance] = useState()
   const [accBalance, setAccBalance] = useState()
+  const [provider, setProvider] = useState()
+  const [library, setLibrary] = useState()
+
+  console.log("app library", library)
 
   return (
     <>
@@ -18,11 +22,17 @@ function MyApp({ Component, pageProps }) {
         accTokenBalance={accTokenBalance}
         setAccBalance={setAccBalance}
         setAccTokenBalance={setAccTokenBalance}
+        provider={provider}
+        library={library}
+        setProvider={setProvider}
+        setLibrary={setLibrary}
       />
       <Component
         account={account}
         accBalance={accBalance}
         accTokenBalance={accTokenBalance}
+        provider={provider}
+        library={library}
         {...pageProps}
       />
     </>
