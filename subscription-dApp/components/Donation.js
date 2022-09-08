@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react"
-import Web3Modal from "web3modal"
-import WalletConnect from "@walletconnect/web3-provider"
 
 import { ToastContainer, toast } from "react-toastify"
-import WalletConnect from "@walletconnect/web3-provider"
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEthereum } from "@fortawesome/free-brands-svg-icons"
 import { faDollarSign } from "@fortawesome/free-solid-svg-icons"
