@@ -20,6 +20,7 @@ import {
   utils,
   ContractFactory,
 } from "ethers"
+import { useRouter } from "next/router"
 
 const providerOptions = {
   walletconnect: {
@@ -49,15 +50,16 @@ export default function Wallet({
   setAccBalance,
   accTokenBalance,
   setAccTokenBalance,
+  setProvider,
+  setLibrary,
+  provider,
+  library,
 }) {
-  const [provider, setProvider] = useState()
-  const [library, setLibrary] = useState()
-
-  const [isOwner, setIsOwner] = useState(false)
+  const router = useRouter()
 
   let web3Modal
   if (typeof window !== "undefined") {
-    const web3Modal = new Web3Modal({
+    web3Modal = new Web3Modal({
       providerOptions, // required
       cacheProvider: true, // optional
     })
@@ -73,6 +75,7 @@ export default function Wallet({
           },
         ],
       })
+      router.reload("/")
     } catch (err) {
       console.error(err.message)
     }
@@ -82,44 +85,11 @@ export default function Wallet({
     await changeNetwork()
   }
 
-  const getOwner = async (currentAccount) => {
-    try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-
-      const provider = await web3Modal.connect()
-      const library = new ethers.providers.Web3Provider(provider)
-
-      const subscriptionContract = new Contract(
-        subscriptionAddress,
-        SUBSCRIPTION_CONTRACT_ABI,
-        library
-      )
-
-      const owner = await subscriptionContract.owner()
-
-      if (currentAccount.toLowerCase() === owner.toLowerCase()) {
-        setIsOwner(true)
-      } else {
-        setIsOwner(false)
-      }
-    } catch (err) {
-      console.error(err.message)
-    }
-  }
-
   const refreshState = () => {
     setAccount()
   }
 
   useEffect(() => {
-    const web3Modal = new Web3Modal({
-      cacheProvider: true, // optional
-      providerOptions, // required
-    })
-
     if (web3Modal.cachedProvider) {
       connectWallet()
     }
@@ -128,12 +98,9 @@ export default function Wallet({
   useEffect(() => {
     if (provider?.on) {
       const handleAccountsChanged = (accounts) => {
-        setIsOwner(false)
-
         if (accounts) {
           setAccount(accounts[0])
 
-          getOwner(accounts[0])
           connectWallet()
         }
       }
@@ -161,27 +128,19 @@ export default function Wallet({
   }, [provider])
 
   const disconnect = async () => {
-    const web3Modal = new Web3Modal({
-      cacheProvider: true,
-      providerOptions,
-    })
     await web3Modal.clearCachedProvider()
     refreshState()
   }
 
   const connectWallet = async () => {
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true,
-        providerOptions,
-      })
-
       const provider = await web3Modal.connect()
 
       const library = new ethers.providers.Web3Provider(provider)
       const accounts = await library.listAccounts()
 
       const { chainId } = await library.getNetwork()
+
       setProvider(provider)
       setLibrary(library)
 
@@ -193,13 +152,12 @@ export default function Wallet({
         signer
       )
 
-      if (chainId !== 5) {
-        await changeNetwork()
-      }
-
       if (accounts) {
         setAccount(accounts[0])
-        await getOwner(accounts[0])
+
+        if (chainId !== 5) {
+          await changeNetwork()
+        }
 
         const readBalance = await library.getBalance(accounts[0])
         const accountBalance = ethers.utils.formatEther(readBalance)

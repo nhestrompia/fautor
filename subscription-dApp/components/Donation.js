@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react"
-import Web3Modal from "web3modal"
-// import WalletConnect from "@walletconnect/web3-provider"
-// import truncateEthAddress from "truncate-eth-address"
+
 import { ToastContainer, toast } from "react-toastify"
-import WalletConnect from "@walletconnect/web3-provider"
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEthereum } from "@fortawesome/free-brands-svg-icons"
 import { faDollarSign } from "@fortawesome/free-solid-svg-icons"
@@ -28,15 +26,6 @@ import {
 
 import FormInput from "./FormInput"
 import { useRouter } from "next/router"
-
-const providerOptions = {
-  walletconnect: {
-    package: WalletConnect, // required
-    options: {
-      infuraId: process.env.NEXT_PUBLIC, // required
-    },
-  },
-}
 
 export default function Donation(props, account) {
   const router = useRouter()
@@ -67,13 +56,7 @@ export default function Donation(props, account) {
   const donate = async (e) => {
     e.preventDefault()
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-      const provider = await web3Modal.connect()
-      const library = new ethers.providers.Web3Provider(provider)
-      const signer = library.getSigner()
+      const signer = props.library.getSigner()
 
       const tokenContract = new Contract(
         TOKEN_CONTRACT_ADDRESS,
@@ -83,12 +66,7 @@ export default function Donation(props, account) {
 
       const signerAdd = await signer.getAddress()
 
-      console.log(subscriptionAddress)
-      // console.log("eth donate", donationETHValues)
-
       if (buttonId === "ERC") {
-        console.log("erc value", donationValues.amount.typeOf)
-
         const tx = await toast.promise(
           tokenContract.transfer(
             props.subscription,
@@ -101,14 +79,8 @@ export default function Donation(props, account) {
           }
         )
         await tx.wait()
-        // router.push(`/plans/${props.pageId}`)
       }
       if (buttonId === "ETH") {
-        // const donatedAmount = donationTokenValues.amount
-
-        // console.log("asdas", String(donatedAmount).typeOf)
-        console.log("eth value", donationValues.amount.typeOf)
-
         const data = {
           from: signerAdd,
           to: props.subscription,

@@ -28,24 +28,14 @@ import {
 } from "../../constants"
 import useSWR, { SWRConfig } from "swr"
 
-const providerOptions = {
-  walletconnect: {
-    package: WalletConnect, // required
-    options: {
-      infuraId: process.env.NEXT_PUBLIC_INFURA_ID, // required
-    },
-  },
-}
-
 const FETCH_PAGE = "http://fautor.vercel.app/api/plans"
 
 const fetcher = (url) => axios.get(url).then((res) => res.data)
 
-export default function PlanHome({ plansData, fallback, account }) {
+export default function PlanHome({ plansData, fallback, account, library }) {
   const [buttonText, setButtonText] = useState("Create Plan")
 
   const [isOpen, setIsOpen] = useState(false)
-  const [nftAddress, setNftAddress] = useState("")
 
   const [deployValues, setDeployValues] = useState({
     title: "",
@@ -59,7 +49,6 @@ export default function PlanHome({ plansData, fallback, account }) {
   })
 
   const router = useRouter()
-  const { id } = router.query
 
   const inputs = [
     {
@@ -84,14 +73,6 @@ export default function PlanHome({ plansData, fallback, account }) {
       label: "Description",
     },
   ]
-
-  let web3Modal
-  if (typeof window !== "undefined") {
-    const web3Modal = new Web3Modal({
-      providerOptions, // required
-      cacheProvider: true, // optional
-    })
-  }
 
   const sendPlan = async (acc, sub, nft) => {
     try {
@@ -122,12 +103,6 @@ export default function PlanHome({ plansData, fallback, account }) {
   const deployContracts = async (e) => {
     e.preventDefault()
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-      const provider = await web3Modal.connect()
-      const library = new ethers.providers.Web3Provider(provider)
       const signer = library.getSigner()
 
       const accounts = await library.listAccounts()
@@ -147,7 +122,7 @@ export default function PlanHome({ plansData, fallback, account }) {
       const deployedSubscriptionAddress = await toast.promise(
         contractFactory.deploy(),
         {
-          pending: "Deploying...",
+          pending: "Deploying Subscription Contract...",
           success: "Subscription Contract Deployed 👌",
           error: "Something went wrong 🤯",
         }
@@ -156,7 +131,7 @@ export default function PlanHome({ plansData, fallback, account }) {
       setButtonText("Deploying Contracts...")
 
       const tx = await toast.promise(contractFactoryNFT.deploy(), {
-        pending: "Deploying...",
+        pending: "Deploying NFT Contract...",
         success: "NFT Contract Deployment Started",
         error: "Something went wrong 🤯",
       })
@@ -171,7 +146,7 @@ export default function PlanHome({ plansData, fallback, account }) {
       const mintAddress = await toast.promise(
         NFTContract.setMinterAddress(deployedSubscriptionAddress.address),
         {
-          pending: "Deploying...",
+          pending: "Setting up NFT contract for subscribers...",
           success: "Minter address has been set 👌",
           error: "Something went wrong 🤯",
         }
@@ -268,8 +243,6 @@ export default function PlanHome({ plansData, fallback, account }) {
 
 export const getServerSideProps = async () => {
   const plansData = await fetcher(FETCH_PAGE)
-
-  // console.log("plansData", plansData)
 
   return {
     props: {

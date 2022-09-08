@@ -15,34 +15,11 @@ import {
 } from "../../../constants"
 import SubscriptionCard from "../../../components/SubscriptionCard"
 
-const providerOptions = {
-  walletconnect: {
-    package: WalletConnect, // required
-    options: {
-      infuraId: process.env.NEXT_PUBLIC_INFURA_ID, // required
-    },
-  },
-}
-
-export default function SubscriberPage({ subscriptions, account }) {
+export default function SubscriberPage({ subscriptions, account, library }) {
   const router = useRouter()
-
-  let web3Modal
-  if (typeof window !== "undefined") {
-    const web3Modal = new Web3Modal({
-      providerOptions, // required
-      cacheProvider: true, // optional
-    })
-  }
 
   const cancelSubscription = async (planId, subbedAddress) => {
     try {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true, // optional
-        providerOptions, // required
-      })
-      const provider = await web3Modal.connect()
-      const library = new ethers.providers.Web3Provider(provider)
       const signer = library.getSigner()
 
       const subscriptionContract = new Contract(
