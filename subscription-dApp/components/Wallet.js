@@ -20,6 +20,7 @@ import {
   utils,
   ContractFactory,
 } from "ethers"
+import { useRouter } from "next/router"
 
 const providerOptions = {
   walletconnect: {
@@ -56,6 +57,8 @@ export default function Wallet({
 }) {
   const [isOwner, setIsOwner] = useState(false)
 
+  const router = useRouter()
+
   let web3Modal
   if (typeof window !== "undefined") {
     web3Modal = new Web3Modal({
@@ -81,6 +84,7 @@ export default function Wallet({
 
   const handleNetworkSwitch = async () => {
     await changeNetwork()
+    router.reload("/")
   }
 
   const getOwner = async (currentAccount) => {
