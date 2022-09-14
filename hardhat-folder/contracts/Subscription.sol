@@ -132,7 +132,7 @@ struct Subscriber {
     mapping(address => Subscriber) public subscribers;
 
     address public masterAddress = payable(0x664C66ece173898ea923cFA8060e9b0C6EF599aB);
-    address tokenOption1 = payable(0xAb98a637994A2254fc762B7aE78d9b628ED7210A);
+    address public tokenOption1 = payable(0xAb98a637994A2254fc762B7aE78d9b628ED7210A);
 
     address  public ownerAddress;
 
@@ -144,6 +144,11 @@ struct Subscriber {
         _;
     }
 
+
+  function changeParams(address _masterAddress, address _tokenOption ) public onlyOwner{
+    masterAddress = _masterAddress;
+    tokenOption1 = _tokenOption;
+  }
  
    
     function createPlan(string memory _name, string memory _uri, uint256 price, address _nftAddress) public onlyOwner{
@@ -216,10 +221,15 @@ function cancelSubscription(address _customer, uint _id, address _token) public 
       require(_subscriptionCost <= tokenInterface.balanceOf(msg.sender), "Insufficient token balance.");
 
       plans[_id].subscribers += 1;
-        subscribers[msg.sender] = Subscriber(_id, block.timestamp,block.timestamp,true,1);
+      subscribers[msg.sender] = Subscriber(_id, block.timestamp,block.timestamp,true,1);
 
-        require((tokenInterface.allowance(msg.sender, address(this)) >= (_subscriptionCost * 12)) && (tokenInterface.allowance(msg.sender, address(this)) <= 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff), "Allowance of (_subscriptionCost * 12) required.");
-    require(tokenInterface.transferFrom(msg.sender, ownerAddress, _subscriptionCost), "Subscription payment failed.");
+      require((tokenInterface.allowance(msg.sender, address(this)) >= (_subscriptionCost * 12)) && (tokenInterface.allowance(msg.sender, address(this)) <= 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff), "Allowance of (_subscriptionCost * 12) required.");
+    
+      uint256 feeAmount = (_subscriptionCost/100)*fee ;
+      require(tokenInterface.transferFrom(msg.sender, masterAddress, feeAmount), " Subscription payment failed.");
+
+      uint256 newAmount = _subscriptionCost - feeAmount;
+      require(tokenInterface.transferFrom(msg.sender, ownerAddress, newAmount), " Subscription payment failed.");
         
         
     tierBadges.mint(msg.sender , _id);
