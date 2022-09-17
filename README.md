@@ -7,31 +7,34 @@ Creators upload the image while creating each tier and images will be deployed t
 
 There is also a donation functionality in the dApp where supports can be done both via ETH and EST(Example Stable Token).
 
-For subscription payments, the predetermined address will receive 8% of each subscription payment. For donations, 4% each donation will be sent to predetermined address in the same transaction with a payment splitting logic.
+For subscription payments, the predetermined address will receive 8% of each subscription payment. For donations, 4% of each donation will be sent to predetermined address in the same transaction with a payment splitting logic.
+
+Users can cancel their subscriptions any time in the User page and that will stop the payments from them
 
 
 
 
 
-Used technologies
+Used technologies/tools
 
 Backend
 
-    Solidity,
-    OpenZeppelin,
-    IPFS and nft.storage,
-    Hardhat,
-    mongoDB,
+    Solidity
+    OpenZeppelin
+    IPFS and nft.storage
+    Hardhat
+    mongoDB
     nodeJS
 
 Frontend
 
-    React,
-    Next.js,
-    Ethers,
+    React
+    Next.js
+    Ethers
+    TailwindCSS
 
 Testing
 
-    Hardhat,
+    Hardhat
     Chai
     
