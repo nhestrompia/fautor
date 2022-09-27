@@ -38,8 +38,6 @@ export default function Donation(props, account) {
   })
 
   const onChange = (e) => {
-    console.log("target id", buttonId)
-
     setDonationValues({
       ...donationValues,
       ["note"]: e.target.value,

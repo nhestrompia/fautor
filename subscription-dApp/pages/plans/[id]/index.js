@@ -409,8 +409,6 @@ export default function PlanPage({
         image: files[0],
       })
 
-      console.log(metadata)
-
       setNftUrlIpfs(metadata.url)
 
       const urlArray = metadata.data.image.href.split("/")
@@ -498,14 +496,6 @@ export default function PlanPage({
       console.log(err)
     }
   }
-
-  // const getIPFSGatewayURL = (ipfsURL) => {
-  //   const urlArray = ipfsURL.split("/")
-  //   const ipfsGateWayURL = `https://ipfs.io/ipfs/${urlArray[2]}/${urlArray[3]}`
-  //   console.log("ipfs url", ipfsGateWayURL)
-  //   console.log("meteadata url state", metaDataURL)
-  //   return ipfsGateWayURL
-  // }
 
   const getAllowance = async (signer, planId) => {
     try {

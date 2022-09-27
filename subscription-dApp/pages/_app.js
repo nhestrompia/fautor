@@ -11,8 +11,6 @@ function MyApp({ Component, pageProps }) {
   const [provider, setProvider] = useState()
   const [library, setLibrary] = useState()
 
-  console.log("app library", library)
-
   return (
     <>
       <Navigation

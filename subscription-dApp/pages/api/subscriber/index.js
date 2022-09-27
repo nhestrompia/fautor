@@ -11,8 +11,6 @@ export default async function handler(req, res) {
 
   if (method === "GET") {
     try {
-      console.log("req", req.id)
-
       const subscriber = await Subscriber.find().populate({
         path: "subscriptions",
         populate: {

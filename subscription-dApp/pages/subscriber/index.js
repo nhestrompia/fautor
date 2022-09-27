@@ -36,7 +36,6 @@ export default function UserPage({ subscriptions, account, library }) {
       await tx.wait()
 
       router.reload("/subscriber")
-      console.log("sub router")
     } catch (err) {
       console.error(err)
     }
