@@ -14,7 +14,9 @@ export default function SubscriptionList({ plansData, account, setIsOpen }) {
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(0)
 
-  const { data, error } = useSWR(`/api/plans?page=${page}`, fetcher)
+  const { data, error } = useSWR(`/api/plans?page=${page}`, fetcher, {
+    refreshInterval: 5000,
+  })
 
   useEffect(() => {
     if (data) {

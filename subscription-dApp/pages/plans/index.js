@@ -241,7 +241,7 @@ export default function PlanHome({ plansData, fallback, account, library }) {
   )
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const plansData = await fetcher(FETCH_PAGE)
 
   return {
@@ -250,5 +250,6 @@ export const getServerSideProps = async () => {
         "/api/plans": plansData,
       },
     },
+    revalidate: 5,
   }
 }
