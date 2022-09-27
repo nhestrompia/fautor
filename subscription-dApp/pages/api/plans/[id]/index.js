@@ -29,8 +29,6 @@ export default async function handler(req, res) {
 
   if (method === "DELETE") {
     try {
-      console.log("delete req", id)
-
       const plans = await Plan.findById(id).populate({
         path: "tiers",
         populate: {
@@ -41,7 +39,6 @@ export default async function handler(req, res) {
       const plan = plans.tiers[req.body.plan]
       const arrayId = plan._id
       const planId = plan.planList._id
-      console.log("planId", planId)
 
       const subscriberUpdate = await Subscriber.find()
         .select("subscriptions")
@@ -54,8 +51,6 @@ export default async function handler(req, res) {
             },
           },
         })
-
-      console.log("sub upda", subscriberUpdate)
 
       const removePlan = await EachPlan.deleteOne({ _id: planId })
 
@@ -76,11 +71,7 @@ export default async function handler(req, res) {
 
   if (method === "POST") {
     try {
-      console.log("add", req.body.address)
-
       if ("subscriptions" in body || "address" in body) {
-        console.log("sub")
-
         const plans = await Plan.findById(id).populate({
           path: "tiers",
           populate: {
